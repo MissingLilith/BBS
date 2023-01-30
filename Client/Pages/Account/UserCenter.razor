@@ -1,0 +1,60 @@
+﻿@page "/usercenter"
+@layout UserLayout
+
+<PageTitle>个人中心</PageTitle>
+
+<h1>个人中心</h1>
+<Divider />
+@if (IsLoggedIn == false)
+{
+    <h2>请登录以获取您的用户信息</h2>
+}
+@if (IsLoggedIn == true)
+{
+    <div>
+        <BootstrapInputGroup class="group">
+            <BootstrapInputGroupLabel DisplayText="个人ID" />
+            <Display @bind-Value="@UserId"></Display>
+        </BootstrapInputGroup>
+        <BootstrapInputGroup class="group">
+            <BootstrapInputGroupLabel DisplayText="用户名" />
+            <Display @bind-Value="@UserName"></Display>
+        </BootstrapInputGroup>
+        <BootstrapInputGroup class="group">
+            <BootstrapInputGroupLabel DisplayText="创建时间" />
+            <Display @bind-Value="@CreatedTime"></Display>
+        </BootstrapInputGroup>
+        <BootstrapInputGroup class="group">
+            <BootstrapInputGroupLabel DisplayText="管理员" />
+            <Display @bind-Value="@IsAdmin"></Display>
+        </BootstrapInputGroup>
+        <Divider />
+        <BootstrapInputGroup class="group">
+            <BootstrapInputGroupLabel DisplayText="原密码" />
+            <BootstrapPassword @bind-Value="@OldPwd" />
+        </BootstrapInputGroup>
+        <Divider />
+        <BootstrapInputGroup class="group">
+            <BootstrapInputGroupLabel DisplayText="修改用户名" />
+            <BootstrapInput @bind-Value="@editUserModel.UserName" />
+        </BootstrapInputGroup>
+        <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改" Content="确定修改用户名吗？" OnConfirm="@ChangeName"/>
+        <Divider />
+        <BootstrapInputGroup class="group">
+            <BootstrapInputGroupLabel DisplayText="修改密码" />
+            <BootstrapPassword @bind-Value="@NewPwd" />
+        </BootstrapInputGroup>
+        <BootstrapInputGroup class="group">
+            <BootstrapInputGroupLabel DisplayText="再次确认" />
+            <BootstrapPassword @bind-Value="@PwdConfirm" />
+        </BootstrapInputGroup>
+        <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改密码" Content="确定修改密码吗？" OnConfirm="@ChangePwd"/>
+    </div>
+}
+
+<style>
+    .group{
+        margin:20px 0;
+        width:500px;
+    }
+</style>

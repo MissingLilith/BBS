@@ -1,0 +1,30 @@
+﻿@page "/logout"
+@layout LoginLayout
+
+@inject SwalService SwalService
+@inject NavigationManager Navigation
+@inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorage
+
+<div>
+</div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+
+        var op = new SwalOption()
+            {
+                Category = SwalCategory.Success,
+                Title = "登出成功",
+                Content = "稍后将自动返回主页",
+                ShowClose = false,
+                IsAutoHide = true,
+                Delay = 3000
+            };
+        LocalStorage.RemoveItem("token");
+        await SwalService.Show(op);
+        await Task.Delay(2000);
+        Navigation.NavigateTo("/");
+    }
+}

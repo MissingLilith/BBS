@@ -1,0 +1,90 @@
+﻿@page "/login"
+@layout LoginLayout
+
+@using SchoolBBS.Shared;
+@inject NavigationManager Navigation
+@inject HttpClient Http
+@inject MessageService MsgSrv
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+@inject SwalService SwalService
+
+<PageTitle>用户登录</PageTitle>
+
+<div class="box">
+    <div class="content">
+        <div class="login-wrapper">
+            <h1>欢 迎 登 录</h1>
+            <div class="login-form">
+                <div class="username form-item">
+                    <span>用户名</span>
+                    <input type="text" class="input-item" @bind="user.UserName">
+                </div>
+                <div class="password form-item">
+                    <span>密码</span>
+                    <input type="password" class="input-item" @bind="user.UserPassword">
+                </div>
+                <button class="login-btn" @onclick="onLogin">登 录</button>
+            </div>
+            <div class="divider">
+                <span class="line"></span>
+                <span class="divider-text"></span>
+                <span class="line"></span>
+            </div>
+            <div class="other-login-wrapper">
+                <button class="register-btn" @onclick="ToRegist">注 册</button>
+                @*<div class="other-login-item">
+                <img src="./asset/QQ.png" alt="">
+                </div>
+                <div class="other-login-item">
+                <img src="./asset/WeChat.png" alt="">
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private UserModel user = new()
+        {
+            UserName = "",
+            UserPassword = ""
+        };
+    SwalOption op = new()
+        {
+            Category = SwalCategory.Success,
+            Title = "登录成功",
+            Content = "3s后将跳转至主页",
+            ShowClose = false,
+            IsAutoHide = true,
+            Delay = 3000
+        };
+    SwalOption er = new()
+        {
+            Category = SwalCategory.Error,
+            Title = "登录失败",
+            Content = "登录失败",
+            ShowClose = true
+        };
+    private async Task onLogin()
+    {
+        var res = await Http.PostAsJsonAsync<UserModel>("api/Account/Login", user);
+        if (res.IsSuccessStatusCode)
+        {
+            var token = await res.Content.ReadAsStringAsync();
+            await LocalStorage.SetItemAsync("token", token);
+            await SwalService.Show(op);
+            await Task.Delay(3000);
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            er.Content = await res.Content.ReadAsStringAsync();
+            await SwalService.Show(er);
+        }
+
+    }
+    private void ToRegist()
+    {
+        Navigation.NavigateTo("/register");
+    }
+}

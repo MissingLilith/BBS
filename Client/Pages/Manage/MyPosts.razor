@@ -1,0 +1,23 @@
+﻿@page "/myposts"
+@using Microsoft.Extensions.Localization;
+@layout UserLayout
+
+<h3>我的帖子</h3>
+<Divider/>
+@inject IStringLocalizer<Foo> Localizer
+<div>
+    <Table TItem="Foo" Items="@Items.Take(10)" IsStriped="true" IsBordered="true" ShowSkeleton="true"
+           ShowLineNo="true" ShowToolbar="true" ShowDefaultButtons="false" ShowSearch="true" ShowAdvancedSearch="false" IsPagination="true" ShowExtendButtons="true"
+           IsMultipleSelect="true" AllowResizing="true" FixedExtendButtonsColumn="true" >
+        <TableColumns>
+            <TableColumn @bind-Field="@context.Name" Text="帖子ID" Width="80"/>
+            <TableColumn @bind-Field="@context.Name" Text="帖子类型" Width="100" Filterable="true" />
+            <TableColumn @bind-Field="@context.DateTime" Text="帖子标题" TextEllipsis="true" ShowTips="true"/>
+            <TableColumn @bind-Field="@context.DateTime" Text="发布时间" Width="180" Sortable="true" Filterable="true" />
+            <TableColumn @bind-Field="@context.DateTime" Text="点击量" Sortable="true" Filterable="true" />
+            <TableColumn @bind-Field="@context.DateTime" Text="点赞量" Sortable="true" Filterable="true" />
+            <TableColumn @bind-Field="@context.DateTime" Text="回复量" Sortable="true" Filterable="true" />
+            <TableColumn @bind-Field="@context.DateTime" Text="最后回复时间" Width="180" Sortable="true" Filterable="true" />
+        </TableColumns>
+    </Table>
+</div>

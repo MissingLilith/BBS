@@ -1,0 +1,102 @@
+﻿@page "/register"
+@layout LoginLayout
+
+@using SchoolBBS.Shared;
+@inject NavigationManager Navigation
+@inject SwalService SwalService
+@inject HttpClient Http
+@inject Blazored.LocalStorage.ILocalStorageService LocalStorage
+
+<PageTitle>用户注册</PageTitle>
+
+<div class="box">
+    <div class="content">
+        <div class="login-wrapper">
+            <h1>欢 迎 注 册</h1>
+            <div class="login-form">
+                <div class="username form-item">
+                    <span>用户名</span>
+                    <input type="text" class="input-item" @bind="user.UserName">
+                </div>
+                <div class="password form-item">
+                    <span>密码</span>
+                    <input type="password" class="input-item" @bind="user.UserPassword">
+                </div>
+                <div class="password form-item">
+                    <span>确认密码</span>
+                    <input type="password" class="input-item" @bind="repwd">
+                </div>
+                <button class="login-btn" @onclick="onRegister">注 册</button>
+            </div>
+            <div class="divider">
+                <span class="line"></span>
+                <span class="divider-text"></span>
+                <span class="line"></span>
+            </div>
+            <div class="other-login-wrapper">
+                <button class="register-btn" @onclick="ToLogin">登 录</button>
+                @*<div class="other-login-item">
+                <img src="./asset/QQ.png" alt="">
+                </div>
+                <div class="other-login-item">
+                <img src="./asset/WeChat.png" alt="">
+                </div>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private string repwd = "";
+    private UserModel user = new()
+        {
+            UserName = "",
+            UserPassword = ""
+        };
+    SwalOption acc = new()
+        {
+            Category = SwalCategory.Success,
+            Title = "注册成功",
+            Content = "3s后将自动登录并跳转至主页",
+            ShowClose = false,
+            IsAutoHide = true,
+            Delay = 3000
+        };
+    SwalOption er = new()
+        {
+            Category = SwalCategory.Error,
+            Title = "注册失败",
+            Content = "",
+            ShowClose = true
+        };
+    private async Task onRegister()
+    {
+        if (user.UserPassword == "" || repwd == "")
+        {
+            throw new Exception("用户名和密码不能为空");
+        }
+        if (user.UserPassword != repwd)
+        {
+            throw new Exception("两次输入的密码不一致");
+        }
+        var res = await Http.PostAsJsonAsync<UserModel>("api/Account/Register", user);
+        if (res.IsSuccessStatusCode)
+        {
+            await SwalService.Show(acc);
+            await Task.Delay(3000);
+            var lgres = await Http.PostAsJsonAsync<UserModel>("api/Account/Login", user);
+            var token = await lgres.Content.ReadAsStringAsync();
+            await LocalStorage.SetItemAsync("token", "Bearer " + token);
+            Navigation.NavigateTo("/");
+        }
+        else
+        {
+            er.Content = await res.Content.ReadAsStringAsync();
+            await SwalService.Show(er);
+        }
+    }
+    private void ToLogin()
+    {
+        Navigation.NavigateTo("/login");
+    }
+}

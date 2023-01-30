@@ -1,0 +1,49 @@
+﻿@page "/postdetail"
+@using Microsoft.Extensions.Localization;
+
+@inject NavigationManager Navigation
+@inject IStringLocalizer<Foo> Localizer
+
+<PageTitle>帖子正文</PageTitle>
+<div id="container">
+    <h1 class="post-title">PostDetail</h1>
+    <div class="post-top">
+        <p>发布人：<span>123</span>发布时间：<span>345</span>最后修改：<span>567</span>点击：<span>678</span>回复：<span>234</span>顶：<span>234</span>踩：<span>234</span></p>
+    </div>
+    <Divider />
+    <div class="post-detail">
+        <Markdown IsViewer="true" Value="# Viewer Mode"></Markdown>
+    </div>
+    <div>
+        <Table TItem="Foo" Items="@Items.Take(20)" IsBordered="true"
+               ShowLineNo="true" ShowToolbar="true" ShowSearch="false" ShowCardView="true" ShowAdvancedSearch="false" ShowDefaultButtons="false"
+               IsPagination="true" PageItemsSource="@PageItemsSource" OnQueryAsync="@OnQueryAsync">
+            <TableToolbarTemplate>
+                <TableToolbarButton Color="Color.Success" Icon="fa-fw fa-solid fa-pen-to-square" Text="点赞" />
+            </TableToolbarTemplate>
+            <TableColumns>
+                <TableColumn @bind-Field="@context.DateTime" Text="用户信息" Width="180" Align="Alignment.Center">
+                    <Template Context="value">
+                        <div class="d-flex">
+                            <div class="ps-2">
+                                <div>@value.Row.Name</div>
+                                <div>@value.Value</div>
+                            </div>
+                        </div>
+                    </Template>
+                </TableColumn>
+                <TableColumn @bind-Field="@context.Name" Text="回复内容">
+                    <Template Context="text">
+                        <Markdown IsViewer="true" Value="@text.Value"></Markdown>
+                    </Template>
+                </TableColumn>
+                <TableColumn @bind-Field="@context.Address" Text="点赞数" Width="30" Align="Alignment.Center" />
+            </TableColumns>
+        </Table>
+    </div>
+    <Divider />
+    <div>
+        <Markdown />
+        <Button Icon="fas fa-paper-plane" Color="Color.Primary" style="margin:20px 0;float:right;"> 回帖</Button>
+    </div>
+</div>
