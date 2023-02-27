@@ -1,5 +1,5 @@
 # BBS
- ## 介绍
+ ## 技术
   前端：Blazor + BootstrapBlazor  
   后端：ASP.NET Core + Entity Framework Core  
   服务器：SqlServer  
