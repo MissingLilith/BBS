@@ -1,21 +1,15 @@
 ﻿using Blazored.LocalStorage;
 using BootstrapBlazor.Components;
-using Microsoft.AspNetCore.Components;
 using SchoolBBS.Shared;
 using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace SchoolBBS.Client.Pages.Manage
 {
-    public partial class MyPosts
+    public partial class PostManage
     {
-        [Inject]
-        Blazored.LocalStorage.ILocalStorageService localStorageService { get; set; }
-        [Inject]
-        HttpClient httpClient { get; set; }
-        [Inject]
-        NavigationManager Navigation { get; set; }
         private List<PostManageModel> Item = new();
+        //private static IEnumerable<int> PageItemsSource => new int[] { 1, 2, 3, 15, 20 };
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -24,7 +18,7 @@ namespace SchoolBBS.Client.Pages.Manage
             if (!string.IsNullOrEmpty(token))
             {
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                Item = await httpClient.GetFromJsonAsync<List<PostManageModel>>("api/Post/GetSelfPosts");
+                Item = await httpClient.GetFromJsonAsync<List<PostManageModel>>("api/Post/GetAllPosts");
             }
         }
         private Task<QueryData<PostManageModel>> OnQueryAsync(QueryPageOptions options)

@@ -18,14 +18,13 @@ namespace SchoolBBS.Server.Controllers
         public PostController(bbsdbContext context)
         {
             Context = context;
-            postServices=new PostServices(context);
+            postServices = new PostServices(context);
         }
         /// <summary>
         /// 获取全部帖子
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Authorize(Policy = "admin")]
         public IActionResult GetAllPosts()
         {
             try
@@ -38,8 +37,11 @@ namespace SchoolBBS.Server.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        /// <summary>
+        /// 获取所有分类
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
-        [Authorize(Policy = "admin")]
         public IActionResult GetAllPostTypes()
         {
             try
@@ -65,9 +67,9 @@ namespace SchoolBBS.Server.Controllers
             {
                 var auth = HttpContext.AuthenticateAsync();
                 int userId = int.Parse(auth.Result.Principal.Claims.First(t => t.Type.Equals(ClaimTypes.Sid))?.Value);
-                return Ok(postServices.AddPost(postModel,userId));
+                return Ok(postServices.AddPost(postModel, userId));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -85,7 +87,24 @@ namespace SchoolBBS.Server.Controllers
             {
                 return Ok(postServices.AddPostType(postTypeName));
             }
-            catch(Exception ex)
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 获取类型名称
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetPostType(int typeId)
+        {
+            try
+            {
+                return Ok(postServices.GetPostTypeName(typeId));
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -103,6 +122,139 @@ namespace SchoolBBS.Server.Controllers
                 var auth = HttpContext.AuthenticateAsync();
                 int userId = int.Parse(auth.Result.Principal.Claims.First(t => t.Type.Equals(ClaimTypes.Sid))?.Value);
                 return Ok(postServices.GetSelfPosts(userId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 按类型获取帖子
+        /// </summary>
+        /// <param name="typeId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetPostsByTypeId(int typeId)
+        {
+            try
+            {
+                return Ok(postServices.GetPostsByTypeId(typeId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 由Id获取帖子详情
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetPostDetail(int postId)
+        {
+            try
+            {
+                return Ok(postServices.GetPostDetail(postId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 帖子点赞
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Authorize]
+        public IActionResult PostLiked(int postId)
+        {
+            try
+            {
+                return Ok(postServices.PostLiked(postId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        /// <param name="postManageModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public IActionResult EditPost(PostManageModel postManageModel)
+        {
+            try
+            {
+                var auth = HttpContext.AuthenticateAsync();
+                int userId = int.Parse(auth.Result.Principal.Claims.First(t => t.Type.Equals(ClaimTypes.Sid))?.Value);
+                return Ok(postServices.EditPost(postManageModel, userId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 管理员编辑
+        /// </summary>
+        /// <param name="postDetailModel"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Authorize(Policy = "admin")]
+        public IActionResult EditPostDetail(PostDetailModel postDetailModel)
+        {
+            try
+            {
+                var auth = HttpContext.AuthenticateAsync();
+                int userId = int.Parse(auth.Result.Principal.Claims.First(t => t.Type.Equals(ClaimTypes.Sid))?.Value);
+                return Ok(postServices.EditPostDetail(postDetailModel, userId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 删除帖子
+        /// </summary>
+        /// <param name="postId"></param>
+        /// <returns></returns>
+        [HttpDelete]
+        [Authorize]
+        public IActionResult DeletePost(int postId)
+        {
+            try
+            {
+                return Ok(postServices.DeletePost(postId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        public IActionResult GetPostCount()
+        {
+            try
+            {
+                return Ok(postServices.GetPostCount());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        public IActionResult GetStatistics()
+        {
+            try
+            {
+                return Ok(postServices.GetStatistics());
             }
             catch(Exception ex)
             {

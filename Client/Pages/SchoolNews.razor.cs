@@ -1,36 +1,26 @@
 ﻿using BootstrapBlazor.Components;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SchoolBBS.Shared;
+using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace SchoolBBS.Client.Pages
 {
-    public partial class Index
+    public partial class SchoolNews
     {
-        /// <summary>
-        /// Images
-        /// </summary>
-        private static List<string> Images => new()
-    {
-        "/images/banner1.jpg",
-        "/images/banner2.png",
-        "/images/banner3.jpg"
-    };
-        /// <summary>
-        /// Foo 类为Demo测试用，如有需要请自行下载源码查阅
-        /// Foo class is used for Demo test, please download the source code if necessary
-        /// https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/main/src/BootstrapBlazor.Shared/Data/Foo.cs
-        /// </summary>
-        private List<PostListModel> Item = new();
-        private static IEnumerable<int> PageItemsSource => new int[] { 7 };
+        private List<PostListModel> Posts = new();
+
+        private static IEnumerable<int> PageItemsSource => new int[] { 10, 20, 40, 80, 100 };
+
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
-            Item = await httpClient.GetFromJsonAsync<List<PostListModel>>("api/Post/GetAllPosts");
+            Posts = await httpClient.GetFromJsonAsync<List<PostListModel>>("api/Post/GetPostsByTypeId?typeId=1");
         }
         private Task<QueryData<PostListModel>> OnQueryAsync(QueryPageOptions options)
         {
-            IEnumerable<PostListModel> items = Item;
+            IEnumerable<PostListModel> items = Posts;
             var total = items.Count();
             items = items.Skip((options.PageIndex - 1) * options.PageItems).Take(options.PageItems).ToList();
             return Task.FromResult(new QueryData<PostListModel>()
@@ -43,6 +33,19 @@ namespace SchoolBBS.Client.Pages
         {
             Navigation.NavigateTo($"/postdetail?postId={item.Id}");
             return Task.CompletedTask;
+        }
+        private void ToCreate()
+        {
+            string token = localStorageService.GetItem<string>("token");
+            if (string.IsNullOrEmpty(token))
+            {
+                Navigation.NavigateTo("login");
+                throw new Exception("请先登录");
+            }
+            else
+            {
+                Navigation.NavigateTo("postcreate");
+            }
         }
     }
 }

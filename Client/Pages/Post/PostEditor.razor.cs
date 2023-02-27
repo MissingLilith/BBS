@@ -1,13 +1,12 @@
-﻿using Blazored.LocalStorage;
-using BootstrapBlazor.Components;
+﻿using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
 using SchoolBBS.Shared;
-using System.Net.Http;
+using System.Diagnostics.CodeAnalysis;
 using System.Net.Http.Json;
 
 namespace SchoolBBS.Client.Pages.Post
 {
-    public partial class PostCreate
+    public partial class PostEditor
     {
         [Inject]
         Blazored.LocalStorage.ILocalStorageService localStorageService { get; set; }
@@ -18,7 +17,12 @@ namespace SchoolBBS.Client.Pages.Post
         [Inject]
         SwalService Swal { get; set; }
 
-        private PostCreateModel post = new();
+        [Parameter]
+        [SupplyParameterFromQuery(Name = "postId")]
+        public int PostId { get; set; }
+        [NotNull]
+        private Markdown? MarkdownSetValue { get; set; }
+        private PostDetailModel Post = new();
         private IEnumerable<SelectedItem> Items { get; set; } = new[]
     {
         new SelectedItem ("0", "请选择..."),
@@ -44,17 +48,25 @@ namespace SchoolBBS.Client.Pages.Post
             Content = "Error",
             ShowClose = true
         };
-        private async Task onCreate()
+        protected override async Task OnInitializedAsync()
         {
-            if(post.PostTypeId==0)
+            Post = await httpClient.GetFromJsonAsync<PostDetailModel>($"api/Post/GetPostDetail?postId={PostId}");
+            await Task.Delay(600);
+            await MarkdownSetValue.SetValue(Post.PostContent);
+
+            await base.OnInitializedAsync();
+        }
+        private async Task onEdit()
+        {
+            if (Post.PostTypeId == 0)
             {
                 throw new Exception("请选择帖子分区");
             }
-            if(string.IsNullOrEmpty(post.PostTitle))
+            if (string.IsNullOrEmpty(Post.PostTitle))
             {
                 throw new Exception("标题不能为空");
             }
-            if(string.IsNullOrEmpty(post.PostContent))
+            if (string.IsNullOrEmpty(Post.PostContent))
             {
                 throw new Exception("内容不能为空");
             }
@@ -62,8 +74,8 @@ namespace SchoolBBS.Client.Pages.Post
             if (!string.IsNullOrEmpty(token))
             {
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                var res = await httpClient.PostAsJsonAsync<PostCreateModel>("api/Post/AddPost", post);
-                if(res.IsSuccessStatusCode)
+                var res = await httpClient.PostAsJsonAsync<PostDetailModel>("api/Post/EditPostDetail", Post);
+                if (res.IsSuccessStatusCode)
                 {
                     await Swal.Show(ok);
                     await Task.Delay(1500);

@@ -1,49 +1,52 @@
 ﻿@page "/postdetail"
 @using Microsoft.Extensions.Localization;
+@using SchoolBBS.Shared;
 
 @inject NavigationManager Navigation
-@inject IStringLocalizer<Foo> Localizer
+@inject HttpClient httpClient
+@inject Blazored.LocalStorage.ILocalStorageService localStorageService
+@inject ToastService ToastService
 
-<PageTitle>帖子正文</PageTitle>
+<PageTitle>@Post.PostTitle</PageTitle>
 <div id="container">
-    <h1 class="post-title">PostDetail</h1>
+    <h1 class="post-title">@Post.PostTitle</h1>
     <div class="post-top">
-        <p>发布人：<span>123</span>发布时间：<span>345</span>最后修改：<span>567</span>点击：<span>678</span>回复：<span>234</span>顶：<span>234</span>踩：<span>234</span></p>
+        <p>发布人：<span>@Post.CreateUserId</span>发布时间：<span>@Post.CreateTime</span>回复量：<span>@Post.Replys</span>点赞量：<span>@Post.Likes</span></p>
     </div>
     <Divider />
-    <div class="post-detail">
-        <Markdown IsViewer="true" Value="# Viewer Mode"></Markdown>
-    </div>
+    <Markdown IsViewer="true" Value="@Post.PostContent" @ref="MarkdownSetValue" style="width:100%; min-height:300px;margin-bottom:20px;"></Markdown>
     <div>
-        <Table TItem="Foo" Items="@Items.Take(20)" IsBordered="true"
+        <Table TItem="GetReplysModel" IsBordered="true"
                ShowLineNo="true" ShowToolbar="true" ShowSearch="false" ShowCardView="true" ShowAdvancedSearch="false" ShowDefaultButtons="false"
-               IsPagination="true" PageItemsSource="@PageItemsSource" OnQueryAsync="@OnQueryAsync">
+               IsPagination="true" OnQueryAsync="@OnQueryAsync" ShowEmpty="true" OnDoubleClickRowCallback="@ReplyLiked" IsAutoRefresh="true">
             <TableToolbarTemplate>
-                <TableToolbarButton Color="Color.Success" Icon="fa-fw fa-solid fa-pen-to-square" Text="点赞" />
+                <TableToolbarButton Color="Color.Success" Icon="fa-fw fa-solid fa-thumbs-up" OnClick="OnLiked" Text="点赞帖子" />
             </TableToolbarTemplate>
             <TableColumns>
-                <TableColumn @bind-Field="@context.DateTime" Text="用户信息" Width="180" Align="Alignment.Center">
+                <TableColumn @bind-Field="@context.Id" Visible="false" Sortable="true" DefaultSort="true" DefaultSortOrder="@SortOrder.Asc" />
+                <TableColumn @bind-Field="@context.CreateTime" Text="用户信息" Width="180" Align="Alignment.Center" Searchable="true" Sortable="true">
                     <Template Context="value">
                         <div class="d-flex">
                             <div class="ps-2">
-                                <div>@value.Row.Name</div>
+                                <div>用户：@value.Row.CreateUserId</div>
                                 <div>@value.Value</div>
                             </div>
                         </div>
                     </Template>
                 </TableColumn>
-                <TableColumn @bind-Field="@context.Name" Text="回复内容">
+                <TableColumn @bind-Field="@context.ReplyContent" Text="回复内容" Searchable="true">
                     <Template Context="text">
                         <Markdown IsViewer="true" Value="@text.Value"></Markdown>
                     </Template>
                 </TableColumn>
-                <TableColumn @bind-Field="@context.Address" Text="点赞数" Width="30" Align="Alignment.Center" />
+                <TableColumn @bind-Field="@context.Likes" Text="点赞数" Width="100" Align="Alignment.Center" Sortable="true">
+                </TableColumn>
             </TableColumns>
         </Table>
     </div>
-    <Divider />
+    <Divider Text="发表回复" Alignment="Alignment.Left" />
     <div>
-        <Markdown />
-        <Button Icon="fas fa-paper-plane" Color="Color.Primary" style="margin:20px 0;float:right;"> 回帖</Button>
+        <Markdown @bind-Value="@NewReply.ReplyContent" />
+        <Button Icon="fas fa-paper-plane" Color="Color.Primary" style="margin:20px 0;float:right;" OnClick="OnReply"> 回帖</Button>
     </div>
 </div>

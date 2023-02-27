@@ -1,8 +1,31 @@
 ﻿@page "/statistics"
 @layout ManageLayout
 
-<h3>Statistics</h3>
+<h3>数据统计</h3>
+<Divider />
 
-@code {
-
-}
+<Row ItemsPerRow="ItemsPerRow.One">
+    <Card>
+        <BodyTemplate>
+            <h5>用户数量：@UserCount</h5>
+    <Progress Value="@UserCountV" Color="Color.Success"></Progress>
+        </BodyTemplate>
+    </Card>
+    <Card>
+        <BodyTemplate>
+            <h5>帖子数量：@PostCount</h5>
+            <Progress Value="@PostCountV"></Progress>
+        </BodyTemplate>
+    </Card>
+    <Card>
+        <BodyTemplate>
+            <h5>回复数量：@ReplyCount</h5>
+            <Progress Value="@ReplyCountV"></Progress>
+        </BodyTemplate>
+    </Card>
+    <Card>
+        <BodyTemplate>
+            <Chart ChartType="ChartType.Doughnut" OnInitAsync="@OnInit" @ref="DoughnutChart" class="pie" />
+        </BodyTemplate>
+    </Card>
+</Row>

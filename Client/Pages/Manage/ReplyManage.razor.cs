@@ -1,13 +1,14 @@
 ﻿using Blazored.LocalStorage;
 using BootstrapBlazor.Components;
 using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SchoolBBS.Shared;
 using System.Net.Http;
 using System.Net.Http.Json;
 
 namespace SchoolBBS.Client.Pages.Manage
 {
-    public partial class MyPosts
+    public partial class ReplyManage
     {
         [Inject]
         Blazored.LocalStorage.ILocalStorageService localStorageService { get; set; }
@@ -15,7 +16,9 @@ namespace SchoolBBS.Client.Pages.Manage
         HttpClient httpClient { get; set; }
         [Inject]
         NavigationManager Navigation { get; set; }
-        private List<PostManageModel> Item = new();
+
+        private List<ReplyManageModel> Item = new();
+        //private static IEnumerable<int> PageItemsSource => new int[] { 1, 2, 3, 15, 20 };
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
@@ -24,46 +27,27 @@ namespace SchoolBBS.Client.Pages.Manage
             if (!string.IsNullOrEmpty(token))
             {
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                Item = await httpClient.GetFromJsonAsync<List<PostManageModel>>("api/Post/GetSelfPosts");
+                Item = await httpClient.GetFromJsonAsync<List<ReplyManageModel>>("api/Reply/GetAllReplys");
             }
         }
-        private Task<QueryData<PostManageModel>> OnQueryAsync(QueryPageOptions options)
+        private Task<QueryData<ReplyManageModel>> OnQueryAsync(QueryPageOptions options)
         {
-            IEnumerable<PostManageModel> items = Item;
+            IEnumerable<ReplyManageModel> items = Item;
             var total = items.Count();
             items = items.Skip((options.PageIndex - 1) * options.PageItems).Take(options.PageItems).ToList();
-            return Task.FromResult(new QueryData<PostManageModel>()
+            return Task.FromResult(new QueryData<ReplyManageModel>()
             {
                 Items = items,
                 TotalCount = total,
             });
         }
-        private static Task<PostManageModel> OnAddAsync() => Task.FromResult(new PostManageModel() { });
-
-        private async Task<bool> OnSaveAsync(PostManageModel item, ItemChangedType itemChangedType)
+        private Task<bool> OnDeleteAsync(IEnumerable<ReplyManageModel> items)
         {
-            var res = await httpClient.PostAsJsonAsync("api/Post/EditPost", item);
-            if (res.IsSuccessStatusCode)
-            {
-                Item.ForEach(i =>
-                {
-                    if (i.Id == item.Id)
-                    {
-                        i.PostTitle = item.PostTitle;
-                        i.PostTypeId = item.PostTypeId;
-                    }
-                });
-                return await Task.FromResult(true);
-            }
-            else { return false; }
-        }
-        private Task<bool> OnDeleteAsync(IEnumerable<PostManageModel> items)
-        {
-            items.ToList().ForEach(async i => await httpClient.DeleteAsync($"api/Post/DeletePost?postId={i.Id}"));
+            items.ToList().ForEach(async i => await httpClient.DeleteAsync($"api/Reply/DeleteReply?ReplyId={i.Id}"));
             items.ToList().ForEach(i => Item.Remove(i));
             return Task.FromResult(true);
         }
-        private Task ClickRow(PostManageModel item)
+        private Task ClickRow(ReplyManageModel item)
         {
             Navigation.NavigateTo($"/posteditor?postId={item.Id}");
             return Task.CompletedTask;

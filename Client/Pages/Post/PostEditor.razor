@@ -1,0 +1,16 @@
+﻿@page "/posteditor"
+
+<h3>帖子编辑</h3>
+<Divider />
+<div>
+    <BootstrapInput PlaceHolder="请输入标题" TValue="string" IsAutoFocus="true" IsSelectAllTextOnFocus="true" ShowLabel="true" DisplayText="帖子标题" @bind-Value="Post.PostTitle" style="margin-bottom:20px;" />
+</div>
+<div>
+    <span>帖子正文</span>
+    <Markdown Height="800" @bind-Value="@Post.PostContent" @ref="MarkdownSetValue" />
+</div>
+<div style="margin:20px 0;">
+    <span style="float:left;margin-right:10px;padding-top:5px">帖子分区</span>
+    <Select Color="Color.Primary" Items="Items" @bind-Value="Post.PostTypeId" style="width:300px;float:left" />
+    <Button Icon="fas fa-paper-plane" Color="Color.Primary" style="margin:0 20px;" OnClick="onEdit"> 发布</Button>
+</div>

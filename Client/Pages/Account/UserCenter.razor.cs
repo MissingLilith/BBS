@@ -10,6 +10,8 @@ namespace SchoolBBS.Client.Pages.Account
 {
     public partial class UserCenter
     {
+        private bool NIsOpen { get; set; } = false;
+        private bool PIsOpen { get; set; } = false;
         private int UserId { get; set; }
         private string UserName { get; set; }
         private string Password { get; set; }
@@ -67,6 +69,7 @@ namespace SchoolBBS.Client.Pages.Account
             if (res.IsSuccessStatusCode)
             {
                 await ToastService.Success("用户名修改成功", "您的用户名已修改，请刷新网页", autoHide: true);
+                NIsOpen = false;
             }
             else
             {
@@ -97,6 +100,7 @@ namespace SchoolBBS.Client.Pages.Account
             if (res.IsSuccessStatusCode)
             {
                 await ToastService.Success("密码修改成功", "您的密码已修改，请重新登录", autoHide: true);
+                PIsOpen = false;
                 await Task.Delay(1500);
                 Navigation.NavigateTo("/logout");
             }

@@ -55,6 +55,7 @@ namespace SchoolBBS.Client.Shared
             new MenuItem() { Text = "返回主页", Icon = "fa-solid fa-fw fa-home", Url = "/" , Match = NavLinkMatch.All},
             new MenuItem() { Text = "用户管理", Icon = "fa-solid fa-fw fa-circle-user", Url = "usermanage" },
             new MenuItem() { Text = "帖子管理", Icon = "fa-solid fa-fw fa-file-lines", Url = "postmanage" },
+            new MenuItem() { Text = "回复管理", Icon = "fa-solid fa-fw fa-file-lines", Url = "replymanage" },
             new MenuItem() { Text = "数据统计", Icon = "fa-solid fa-fw fa-chart-simple", Url = "statistics" }
         };
 

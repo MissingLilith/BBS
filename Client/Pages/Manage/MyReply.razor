@@ -1,0 +1,22 @@
+﻿@page "/myreply"
+@layout UserLayout
+@using SchoolBBS.Shared;
+
+<h3>我的回复</h3>
+<Divider  />
+
+<Table TItem="ReplyManageModel" OnQueryAsync="@OnQueryAsync" OnDeleteAsync="@OnDeleteAsync" OnClickRowCallback="@ClickRow"
+       ShowEmpty="true" IsPagination="true" IsStriped="true" IsBordered="true" IsMultipleSelect="true" IsAutoRefresh="true" IsDetails="true"
+       ShowToolbar="true" ShowSearch="true" ShowExtendButtons="true" ShowExtendEditButton="false" ShowAddButton="false" ShowEditButton="false" ShowSkeleton="true" ShowAdvancedSearch="false">
+    <TableColumns>
+        <TableColumn @bind-Field="@context.Id" Width="100" Readonly="true" Editable="false" Sortable="true" Filterable="true" Searchable="true" />
+        <TableColumn @bind-Field="@context.PostId" Width="50" Sortable="true" Filterable="true" />
+        <TableColumn @bind-Field="@context.ReplyContent" Searchable="true" TextEllipsis="true" ShowTips="true" />
+        <TableColumn @bind-Field="@context.CreateTime" Width="180" Readonly="true" Editable="false" Sortable="true" Filterable="true" />
+        <TableColumn @bind-Field="@context.CreateUserId" Width="100" Readonly="true" Editable="false" Sortable="true" Filterable="true" />
+        <TableColumn @bind-Field="@context.Likes" Width="100" Readonly="true" Editable="false" Sortable="true" Filterable="true" />
+    </TableColumns>
+    <DetailRowTemplate>
+        <Markdown IsViewer="true" @bind-Value="@context.ReplyContent"></Markdown>
+    </DetailRowTemplate>
+</Table>

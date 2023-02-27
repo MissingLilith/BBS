@@ -4,6 +4,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using SchoolBBS.Shared;
+using Microsoft.EntityFrameworkCore;
 
 namespace SchoolBBS.Server.Services
 {
@@ -122,14 +123,14 @@ namespace SchoolBBS.Server.Services
         /// <param name="editUserModel"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool EditUserName(EditUserModel editUserModel,int userId)
+        public bool EditUserName(EditUserModel editUserModel, int userId)
         {
             bool isNameHave = Context.Users.ToList().Exists(x => x.UserName == editUserModel.UserName && x.UserId != userId);
             if (isNameHave)
             {
                 throw new Exception("用户名已存在");
             }
-            Users user= Context.Users.FirstOrDefault(x=>x.UserId == userId);
+            Users user = Context.Users.FirstOrDefault(x => x.UserId == userId);
             if (user != null)
             {
                 user.UserName = editUserModel.UserName;
@@ -147,12 +148,12 @@ namespace SchoolBBS.Server.Services
         /// <param name="editUserModel"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public bool EditUserPassword(EditUserModel editUserModel,int userId)
+        public bool EditUserPassword(EditUserModel editUserModel, int userId)
         {
-            Users users= Context.Users.FirstOrDefault(x=>x.UserId==userId);
+            Users users = Context.Users.FirstOrDefault(x => x.UserId == userId);
             if (users != null)
             {
-                users.UserPassword=editUserModel.UserPassword;
+                users.UserPassword = editUserModel.UserPassword;
                 Context.SaveChanges();
                 return true;
             }
@@ -160,6 +161,50 @@ namespace SchoolBBS.Server.Services
             {
                 throw new Exception("用户不存在");
             }
+        }
+        public int EditUserByAdmin(UserManageModel userManageModel)
+        {
+
+            if (userManageModel.UserId == 0)
+            {
+                Users newUser = new Users();
+                newUser.UserName = userManageModel.UserName;
+                newUser.UserPassword = userManageModel.UserPassword;
+                newUser.isAdmin = userManageModel.IsAdmin;
+                newUser.CreateTime = DateTime.Now;
+                Context.Users.Add(newUser);
+                Context.SaveChanges();
+                return newUser.UserId;
+            }
+            else
+            {
+                Users user = Context.Users.FirstOrDefault(x => x.UserId == userManageModel.UserId);
+                user.UserName = userManageModel.UserName;
+                user.UserPassword = userManageModel.UserPassword;
+                user.isAdmin = userManageModel.IsAdmin;
+                Context.SaveChanges();
+                return user.UserId;
+            }
+        }
+        public bool DeleteUser(int userId)
+        {
+            bool IsUserHave = Context.Users.ToList().Exists(x => x.UserId == userId);
+            if (IsUserHave)
+            {
+                Context.Users.Remove(Context.Users.FirstOrDefault(x => x.UserId == userId));
+                Context.Posts.Where(x => x.CreateUserId == userId).ExecuteDelete();
+                Context.PostReply.Where(x => x.CreateUserId==userId).ExecuteDelete();
+                Context.SaveChanges();
+                return true;
+            }
+            else
+            {
+                throw new Exception("用户不存在");
+            }
+        }
+        public int GetUserCount()
+        {
+            return Context.Users.Count();
         }
     }
 }

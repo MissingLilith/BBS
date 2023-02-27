@@ -28,33 +28,80 @@
             <BootstrapInputGroupLabel DisplayText="管理员" />
             <Display @bind-Value="@IsAdmin"></Display>
         </BootstrapInputGroup>
-        <Divider />
-        <BootstrapInputGroup class="group">
-            <BootstrapInputGroupLabel DisplayText="原密码" />
-            <BootstrapPassword @bind-Value="@OldPwd" />
-        </BootstrapInputGroup>
-        <Divider />
-        <BootstrapInputGroup class="group">
-            <BootstrapInputGroupLabel DisplayText="修改用户名" />
-            <BootstrapInput @bind-Value="@editUserModel.UserName" />
-        </BootstrapInputGroup>
-        <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改" Content="确定修改用户名吗？" OnConfirm="@ChangeName"/>
-        <Divider />
-        <BootstrapInputGroup class="group">
-            <BootstrapInputGroupLabel DisplayText="修改密码" />
-            <BootstrapPassword @bind-Value="@NewPwd" />
-        </BootstrapInputGroup>
-        <BootstrapInputGroup class="group">
-            <BootstrapInputGroupLabel DisplayText="再次确认" />
-            <BootstrapPassword @bind-Value="@PwdConfirm" />
-        </BootstrapInputGroup>
-        <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改密码" Content="确定修改密码吗？" OnConfirm="@ChangePwd"/>
+        @*<Divider />
+    <BootstrapInputGroup class="group">
+    <BootstrapInputGroupLabel DisplayText="原密码" />
+    <BootstrapPassword @bind-Value="@OldPwd" />
+    </BootstrapInputGroup>
+    <Divider />
+    <BootstrapInputGroup class="group">
+    <BootstrapInputGroupLabel DisplayText="修改用户名" />
+    <BootstrapInput @bind-Value="@editUserModel.UserName" />
+    </BootstrapInputGroup>
+    <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改" Content="确定修改用户名吗？" OnConfirm="@ChangeName" />
+    <Divider />
+    <BootstrapInputGroup class="group">
+    <BootstrapInputGroupLabel DisplayText="修改密码" />
+    <BootstrapPassword @bind-Value="@NewPwd" />
+    </BootstrapInputGroup>
+    <BootstrapInputGroup class="group">
+    <BootstrapInputGroupLabel DisplayText="再次确认" />
+    <BootstrapPassword @bind-Value="@PwdConfirm" />
+    </BootstrapInputGroup>
+    <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改密码" Content="确定修改密码吗？" OnConfirm="@ChangePwd" />*@
+        <div class="btn-group" role="group">
+            <Button Color="Color.Primary" @onclick="@(e => NIsOpen = true)">修改用户名</Button>
+            <Button Color="Color.Warning" @onclick="@(e => PIsOpen = true)">修改密码</Button>
+        </div>
+        <Drawer Placement="Placement.Right" IsOpen="@NIsOpen">
+            <div style="height: 290px;margin-top:200px">
+                <h5 style="text-align:center;font-weight:bold">用户名修改</h5>
+                <BootstrapInputGroup class="drawergroup">
+                    <BootstrapInputGroupLabel DisplayText="原密码" />
+                    <BootstrapPassword @bind-Value="@OldPwd" />
+                </BootstrapInputGroup>
+                <BootstrapInputGroup class="drawergroup">
+                    <BootstrapInputGroupLabel DisplayText="修改用户名" />
+                    <BootstrapInput @bind-Value="@editUserModel.UserName" />
+                </BootstrapInputGroup>
+                <div style="margin:auto;text-align:center">
+                    <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改" Content="确定修改用户名吗？" OnConfirm="@ChangeName" style="margin:0 20px" />
+                    <button type="button" class="btn btn-primary" @onclick="@(e => NIsOpen = false)" style="margin:0 20px">取消修改</button>
+                </div>
+            </div>
+        </Drawer>
+        <Drawer Placement="Placement.Right" IsOpen="@PIsOpen">
+            <div style="height: 290px;margin-top:200px">
+                <h5 style="text-align:center">用户密码修改</h5>
+                <BootstrapInputGroup class="drawergroup">
+                    <BootstrapInputGroupLabel DisplayText="原密码" />
+                    <BootstrapPassword @bind-Value="@OldPwd" />
+                </BootstrapInputGroup>
+                <BootstrapInputGroup class="drawergroup">
+                    <BootstrapInputGroupLabel DisplayText="修改密码" />
+                    <BootstrapPassword @bind-Value="@NewPwd" />
+                </BootstrapInputGroup>
+                <BootstrapInputGroup class="drawergroup">
+                    <BootstrapInputGroupLabel DisplayText="再次确认" />
+                    <BootstrapPassword @bind-Value="@PwdConfirm" />
+                </BootstrapInputGroup>
+                <div style="margin:auto;text-align:center">
+                    <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改" Content="确定修改密码吗？" OnConfirm="@ChangePwd" style="margin:0 20px" />
+                    <button type="button" class="btn btn-primary" @onclick="@(e => PIsOpen = false)" style="margin:0 20px">取消修改</button>
+                </div>
+            </div>
+        </Drawer>
     </div>
 }
 
 <style>
-    .group{
-        margin:20px 0;
-        width:500px;
+    .group {
+        margin: 20px 0;
+        width: 500px;
+    }
+
+    .drawergroup {
+        margin: 20px 10px;
+        width: 90%;
     }
 </style>

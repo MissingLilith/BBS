@@ -1,5 +1,9 @@
 ﻿@page "/internationalnews"
 @using Microsoft.Extensions.Localization;
+@using SchoolBBS.Shared;
+@inject HttpClient httpClient
+@inject NavigationManager Navigation
+@inject Blazored.LocalStorage.ISyncLocalStorageService localStorageService
 
 <PageTitle>国际新闻</PageTitle>
 
@@ -35,56 +39,18 @@
 
 <h1 style="text-align:center;margin:20px">欢迎访问国际新闻板块</h1>
 
-@inject IStringLocalizer<Foo> Localizer
 <div>
-    <Table TItem="Foo" Items="@Items.Take(20)" IsBordered="true"
+    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" OnClickRowCallback="@ClickRow"
            ShowToolbar="true" ShowSearch="true" ShowCardView="true" ShowAdvancedSearch="false" ShowDefaultButtons="false"
-           IsPagination="true" PageItemsSource="@PageItemsSource" OnQueryAsync="@OnQueryAsync">
-           <TableToolbarTemplate>
-            <TableToolbarButton Color="Color.Primary" Icon="fas fa-paper-plane" Text="发帖" />
+           IsBordered="true" IsPagination="true" ShowEmpty="true" IsAutoRefresh="true" ShowSkeleton="true" AllowResizing="true">
+        <TableToolbarTemplate>
+            <TableToolbarButton Color="Color.Primary" Icon="fas fa-paper-plane" Text="发帖" OnClick="ToCreate" />
         </TableToolbarTemplate>
         <TableColumns>
-            <TableColumn @bind-Field="@context.DateTime" Text="发布时间" Width="180" />
-            <TableColumn @bind-Field="@context.Name" Text="标题"/>
-            <TableColumn @bind-Field="@context.Name" Text="发布者" Width="120"/>
-            <TableColumn @bind-Field="@context.Address" Text="点赞数" Width="30" />
+            <TableColumn @bind-Field="@context.CreateTime" Text="发布时间" Width="180" Sortable="true" Filterable="true" DefaultSort="true" DefaultSortOrder="SortOrder.Desc" />
+            <TableColumn @bind-Field="@context.PostTitle" Text="标题" TextEllipsis="true" ShowTips="true" Searchable="true" />
+            <TableColumn @bind-Field="@context.Replys" Text="回复量" Width="50" Sortable="true" />
+            <TableColumn @bind-Field="@context.Likes" Text="点赞数" Width="50" Sortable="true" />
         </TableColumns>
     </Table>
 </div>
-
-@code {
-
-    /// <summary>
-    /// Foo 类为Demo测试用，如有需要请自行下载源码查阅
-    /// Foo class is used for Demo test, please download the source code if necessary
-    /// https://gitee.com/LongbowEnterprise/BootstrapBlazor/blob/main/src/BootstrapBlazor.Shared/Data/Foo.cs
-    /// </summary>
-    private List<Foo>? Items { get; set; }
-
-    private static IEnumerable<int> PageItemsSource => new int[] { 10, 20, 40, 80, 100 };
-    /// <summary>
-    /// OnInitialized
-    /// </summary>
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-        //获取随机数据
-        //Get random data
-        Items = Foo.GenerateFoo(Localizer);
-    }
-    private Task<QueryData<Foo>> OnQueryAsync(QueryPageOptions options)
-    {
-        IEnumerable<Foo> items = Items;
-        var total = items.Count();
-        items = items.Skip((options.PageIndex - 1) * options.PageItems).Take(options.PageItems).ToList();
-
-        return Task.FromResult(new QueryData<Foo>()
-            {
-                Items = items,
-                TotalCount = total,
-                IsSorted = true,
-                IsFiltered = true,
-                IsSearch = true
-            });
-    }
-}

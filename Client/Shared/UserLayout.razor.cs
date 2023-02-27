@@ -35,7 +35,7 @@ namespace SchoolBBS.Client.Shared
         /// </summary>
         protected override async Task OnInitializedAsync()
         {
-            base.OnInitialized();
+            await base.OnInitializedAsync();
 
             Menus = GetIconSideMenuItems();
             string token = localStorageService.GetItem<string>("token");
@@ -55,7 +55,7 @@ namespace SchoolBBS.Client.Shared
             new MenuItem() { Text = "返回主页", Icon = "fa-solid fa-fw fa-home", Url = "/" , Match = NavLinkMatch.All},
             new MenuItem() { Text = "账号信息", Icon = "fa-solid fa-fw fa-circle-user", Url = "usercenter" },
             new MenuItem() { Text = "我的帖子", Icon = "fa-solid fa-fw fa-file-lines", Url = "myposts" },
-            new MenuItem() { Text = "我的回复", Icon = "fa-solid fa-fw fa-chart-simple", Url = "myreplies" }
+            new MenuItem() { Text = "我的回复", Icon = "fa-solid fa-fw fa-chart-simple", Url = "myreply" }
         };
 
             return menus;

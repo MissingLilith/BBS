@@ -1,7 +1,8 @@
 ﻿@page "/"
 @using Microsoft.Extensions.Localization;
 @using SchoolBBS.Shared;
-
+@inject NavigationManager Navigation
+@inject HttpClient httpClient
 
 <PageTitle>欢迎访问校园BBS系统</PageTitle>
 
@@ -9,30 +10,22 @@
 
 <h1 style="text-align:center;margin:20px">欢迎访问校园BBS</h1>
 
-@inject NavigationManager Navigation
-<Button @onclick="@ToPD">ToPostDetail</Button>
-<Button @onclick="@ToUC">ToUserCenter</Button>
-<Button @onclick="@ToPC">ToPostCreator</Button>
-<Button @onclick="@GetInfo">GetInfo</Button>
-@inject HttpClient Http
-@inject Blazored.LocalStorage.ISyncLocalStorageService LocalStorage
-@code{
-    GetUserModel getUser = new();
-    private async Task GetInfo()
-    {
-        string token = LocalStorage.GetItem<string>("token");
-        Http.DefaultRequestHeaders.Authorization=new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-        var info = await Http.GetFromJsonAsync<GetUserModel>("api/Account/GetSelfInfo");
-        var name = info.UserName;
-    }
-}
-
 @inject IStringLocalizer<Foo> Localizer
-<div>
-    <Table TItem="Foo" Items="@Items.Take(10)" IsStriped="true" IsBordered="true" ShowSkeleton="true">
+<div style="width:49%;float:left">
+    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" IsStriped="true" IsBordered="true" ShowSkeleton="true" ShowEmpty="true"
+           OnClickRowCallback="@ClickRow" IsAutoRefresh="true" PageItemsSource="@PageItemsSource">
         <TableColumns>
-            <TableColumn @bind-Field="@context.DateTime" Text="新鲜出炉"/>
-            <TableColumn @bind-Field="@context.DateTime" Text="人气热门"/>
+            <TableColumn @bind-Field="@context.CreateTime" Visible="false" Sortable="true" DefaultSort="true" DefaultSortOrder="@SortOrder.Desc"/>
+            <TableColumn @bind-Field="@context.PostTitle" Text="新鲜出炉" />
+        </TableColumns>
+    </Table>
+</div>
+<div style="width:49%;float:right">
+    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" IsStriped="true" IsBordered="true" ShowSkeleton="true" ShowEmpty="true"
+           OnClickRowCallback="@ClickRow" IsAutoRefresh="true" PageItemsSource="@PageItemsSource">
+        <TableColumns>
+            <TableColumn @bind-Field="@context.Likes" Visible="false" Sortable="true" DefaultSort="true" DefaultSortOrder="@SortOrder.Desc"/>
+            <TableColumn @bind-Field="@context.PostTitle" Text="人气热门" />
         </TableColumns>
     </Table>
 </div>

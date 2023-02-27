@@ -119,7 +119,7 @@ namespace SchoolBBS.Server.Controllers
             {
                 var auth = HttpContext.AuthenticateAsync();
                 int userId = int.Parse(auth.Result.Principal.Claims.First(t => t.Type.Equals(ClaimTypes.Sid))?.Value);
-                return Ok(accountServices.EditUserName(editUserModel,userId));
+                return Ok(accountServices.EditUserName(editUserModel, userId));
             }
             catch (Exception ex)
             {
@@ -134,13 +134,50 @@ namespace SchoolBBS.Server.Controllers
             {
                 var auth = HttpContext.AuthenticateAsync();
                 int userId = int.Parse(auth.Result.Principal.Claims.First(t => t.Type.Equals(ClaimTypes.Sid))?.Value);
-                return Ok(accountServices.EditUserPassword(editUserModel,userId));
+                return Ok(accountServices.EditUserPassword(editUserModel, userId));
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
+        [HttpPost]
+        [Authorize(Policy = "admin")]
+        public IActionResult EditUserByAdmin(UserManageModel user)
+        {
+            try
+            {
+                return Ok(accountServices.EditUserByAdmin(user));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpDelete]
+        [Authorize(Policy = "admin")]
+        public IActionResult DeleteUser(int userId)
+        {
+            try
+            {
+                return Ok(accountServices.DeleteUser(userId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        public IActionResult GetUserCount()
+        {
+            try
+            {
+                return Ok(accountServices.GetUserCount());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

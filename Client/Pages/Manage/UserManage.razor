@@ -1,13 +1,20 @@
 ﻿@page "/usermanage"
+@using SchoolBBS.Shared;
+@inject HttpClient httpClient
+@inject Blazored.LocalStorage.ILocalStorageService localStorageService
 @layout ManageLayout
 
-<h3>UserManage</h3>
+<h3>用户管理</h3>
 <Divider />
 
-<Table TItem="BindUserItem" IsPagination="true"
-       IsStriped="true" IsBordered="true" IsMultipleSelect="true" AutoGenerateColumns="true"
-       ShowToolbar="true" ShowExtendButtons="true" ShowSkeleton="true">
+<Table TItem="UserManageModel" OnQueryAsync="@OnQueryAsync" OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync" OnDeleteAsync="@OnDeleteAsync"
+       ShowEmpty="true" IsPagination="true" IsStriped="true" IsBordered="true" IsMultipleSelect="true" IsAutoRefresh="true"
+       ShowToolbar="true" ShowSearch="true" ShowExtendButtons="true" ShowSkeleton="true" ShowAdvancedSearch="false">
+    <TableColumns>
+        <TableColumn @bind-Field="@context.UserId" Width="100" Readonly="true" Editable="false" Sortable="true" Filterable="true" Searchable="true"/>
+        <TableColumn @bind-Field="@context.UserName" Sortable="true" Filterable="true" Searchable="true" />
+        <TableColumn @bind-Field="@context.UserPassword" />
+        <TableColumn @bind-Field="@context.CreateTime" Width="180" Readonly="true" Editable="false" Sortable="true" Filterable="true" />
+        <TableColumn @bind-Field="@context.IsAdmin" Width="100" Sortable="true" Filterable="true" />
+    </TableColumns>
 </Table>
-@code {
-
-}
