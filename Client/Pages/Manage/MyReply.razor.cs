@@ -46,7 +46,7 @@ namespace SchoolBBS.Client.Pages.Manage
         }
         private Task ClickRow(ReplyManageModel item)
         {
-            Navigation.NavigateTo($"/postdetail?postId={item.Id}");
+            Navigation.NavigateTo($"/postdetail?postId={item.PostId}");
             return Task.CompletedTask;
         }
     }
