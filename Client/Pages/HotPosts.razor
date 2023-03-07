@@ -40,7 +40,7 @@
 <h1 style="text-align:center;margin:20px">欢迎访问人气热门板块</h1>
 
 <div>
-    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" OnClickRowCallback="@ClickRow"
+    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" OnClickRowCallback="@ClickRow" AllowResizing="true"
            ShowToolbar="true" ShowCardView="true" ShowAdvancedSearch="false" ShowDefaultButtons="false"
            IsBordered="true" ShowEmpty="true" IsAutoRefresh="true" ShowSkeleton="true">
         <TableToolbarTemplate>
@@ -49,7 +49,7 @@
         <TableColumns>
             <TableColumn @bind-Field="@context.CreateTime" Text="发布时间" Width="180" />
             <TableColumn @bind-Field="@context.PostTitle" Text="标题" TextEllipsis="true" ShowTips="true" />
-            <TableColumn @bind-Field="@context.Replys" Text="回复量" Width="50" />
+            <TableColumn @bind-Field="@context.Replys" Text="回复量" Width="50" Sortable="true" />
             <TableColumn @bind-Field="@context.Likes" Text="点赞数" Width="50" Sortable="true" DefaultSort="true" DefaultSortOrder="SortOrder.Desc" />
         </TableColumns>
     </Table>

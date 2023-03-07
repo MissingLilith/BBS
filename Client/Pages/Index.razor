@@ -4,13 +4,14 @@
 @inject NavigationManager Navigation
 @inject HttpClient httpClient
 
-<PageTitle>欢迎访问校园BBS系统</PageTitle>
+<PageTitle>欢迎访问校园BBS论坛系统</PageTitle>
 
 <Carousel Images="@Images" Width="100%" ShowControls="true" ShowIndicators="true" />
 
-<h1 style="text-align:center;margin:20px">欢迎访问校园BBS</h1>
+<Divider />
+<h1 style="text-align:center;margin:20px">欢迎访问校园BBS论坛系统</h1>
+<Divider />
 
-@inject IStringLocalizer<Foo> Localizer
 <div style="width:49%;float:left">
     <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" IsStriped="true" IsBordered="true" ShowSkeleton="true" ShowEmpty="true"
            OnClickRowCallback="@ClickRow" IsAutoRefresh="true" PageItemsSource="@PageItemsSource">

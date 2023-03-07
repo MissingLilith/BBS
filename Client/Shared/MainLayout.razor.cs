@@ -32,6 +32,7 @@ namespace SchoolBBS.Client.Shared
         private List<MenuItem>? Menus { get; set; }
         private string? UserName { get; set; }
         private bool IsLogin { get; set; } = false;
+        private bool IsAdmin { get; set; } = false;
 
         /// <summary>
         /// OnInitialized 方法
@@ -47,6 +48,7 @@ namespace SchoolBBS.Client.Shared
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
                 var info = await httpClient.GetFromJsonAsync<GetUserModel>("api/Account/GetSelfInfo");
                 UserName = info.UserName;
+                IsAdmin= info.IsAdmin;
                 IsLogin = true;
             }
         }

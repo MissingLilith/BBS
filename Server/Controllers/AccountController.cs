@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolBBS.Entity.Models;
@@ -168,11 +169,36 @@ namespace SchoolBBS.Server.Controllers
             }
         }
         [HttpGet]
+        [EnableCors("any")]
         public IActionResult GetUserCount()
         {
             try
             {
                 return Ok(accountServices.GetUserCount());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [EnableCors("any")]
+        public IActionResult GetUserDateNum()
+        {
+            try
+            {
+                var dateNum = Context.Users.OrderBy(x => x.CreateTime).GroupBy(z => new
+                {
+                    year = z.CreateTime.Value.Year,
+                    month = z.CreateTime.Value.Month,
+                }, (x, y) => new
+                {
+                    num = y.Count(),
+                    x.year,
+                    x.month,
+                    date = x.year + "-" + (x.month >= 10 ? x.month.ToString() : "0" + x.month)
+                }).OrderBy(x => x.year).ThenBy(x => x.month);
+                return Ok(dateNum);
             }
             catch (Exception ex)
             {

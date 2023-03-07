@@ -11,8 +11,34 @@
 }
 @if (IsLoggedIn == true)
 {
+    <Row ItemsPerRow="ItemsPerRow.Two">
+        <Card>
+            <BodyTemplate>
+                <h5 class="card-title">个人ID</h5>
+                <div class="get-date">@UserId</div>
+            </BodyTemplate>
+        </Card>
+        <Card>
+            <BodyTemplate>
+                <h5 class="card-title">用户名</h5>
+                <div class="get-date">@UserName</div>
+            </BodyTemplate>
+        </Card>
+        <Card>
+            <BodyTemplate>
+                <h5 class="card-title">创建时间</h5>
+                <div class="get-date">@CreatedTime</div>
+            </BodyTemplate>
+        </Card>
+        <Card>
+            <BodyTemplate>
+                <h5 class="card-title">是否为管理员</h5>
+                <div class="get-date">@IsAdmin</div>
+            </BodyTemplate>
+        </Card>
+    </Row>
     <div>
-        <BootstrapInputGroup class="group">
+        @*<BootstrapInputGroup class="group">
             <BootstrapInputGroupLabel DisplayText="个人ID" />
             <Display @bind-Value="@UserId"></Display>
         </BootstrapInputGroup>
@@ -27,28 +53,8 @@
         <BootstrapInputGroup class="group">
             <BootstrapInputGroupLabel DisplayText="管理员" />
             <Display @bind-Value="@IsAdmin"></Display>
-        </BootstrapInputGroup>
-        @*<Divider />
-    <BootstrapInputGroup class="group">
-    <BootstrapInputGroupLabel DisplayText="原密码" />
-    <BootstrapPassword @bind-Value="@OldPwd" />
-    </BootstrapInputGroup>
-    <Divider />
-    <BootstrapInputGroup class="group">
-    <BootstrapInputGroupLabel DisplayText="修改用户名" />
-    <BootstrapInput @bind-Value="@editUserModel.UserName" />
-    </BootstrapInputGroup>
-    <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改" Content="确定修改用户名吗？" OnConfirm="@ChangeName" />
-    <Divider />
-    <BootstrapInputGroup class="group">
-    <BootstrapInputGroupLabel DisplayText="修改密码" />
-    <BootstrapPassword @bind-Value="@NewPwd" />
-    </BootstrapInputGroup>
-    <BootstrapInputGroup class="group">
-    <BootstrapInputGroupLabel DisplayText="再次确认" />
-    <BootstrapPassword @bind-Value="@PwdConfirm" />
-    </BootstrapInputGroup>
-    <PopConfirmButton Color="Color.Danger" ConfirmIcon="fa-solid fa-triangle-exclamation text-danger" ConfirmButtonColor="Color.Danger" Text="确认修改密码" Content="确定修改密码吗？" OnConfirm="@ChangePwd" />*@
+        </BootstrapInputGroup>*@
+
         <div class="btn-group" role="group">
             <Button Color="Color.Primary" @onclick="@(e => NIsOpen = true)">修改用户名</Button>
             <Button Color="Color.Warning" @onclick="@(e => PIsOpen = true)">修改密码</Button>
@@ -72,7 +78,7 @@
         </Drawer>
         <Drawer Placement="Placement.Right" IsOpen="@PIsOpen">
             <div style="height: 290px;margin-top:200px">
-                <h5 style="text-align:center">用户密码修改</h5>
+                <h5 style="text-align:center;font-weight:bold">用户密码修改</h5>
                 <BootstrapInputGroup class="drawergroup">
                     <BootstrapInputGroupLabel DisplayText="原密码" />
                     <BootstrapPassword @bind-Value="@OldPwd" />
@@ -95,6 +101,17 @@
 }
 
 <style>
+    .card-title{
+        font-weight:bold;
+    }
+
+    .get-date {
+        font-size: 30px;
+        font-weight: bold;
+        color: #7cb305;
+        margin-top: 15px;
+    }
+
     .group {
         margin: 20px 0;
         width: 500px;
@@ -103,5 +120,10 @@
     .drawergroup {
         margin: 20px 10px;
         width: 90%;
+    }
+
+    .btn-group{
+        margin:20px 0;
+        width:100%;
     }
 </style>

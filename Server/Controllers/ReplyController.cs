@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SchoolBBS.Entity.Models;
@@ -33,7 +34,7 @@ namespace SchoolBBS.Server.Controllers
                 List<PostReply> replies = replyServices.GetAllReplys();
                 return Ok(replies);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -48,7 +49,7 @@ namespace SchoolBBS.Server.Controllers
             {
                 return Ok(replyServices.GetSelfReplys(userId));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -127,11 +128,36 @@ namespace SchoolBBS.Server.Controllers
             }
         }
         [HttpGet]
+        [EnableCors("any")]
         public IActionResult GetReplyCount()
         {
             try
             {
                 return Ok(replyServices.GetReplyCount());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        [EnableCors("any")]
+        public IActionResult GetReplyDateNum()
+        {
+            try
+            {
+                var dateNum = Context.PostReply.OrderBy(x => x.CreateTime).GroupBy(z => new
+                {
+                    year = z.CreateTime.Value.Year,
+                    month = z.CreateTime.Value.Month,
+                }, (x, y) => new
+                {
+                    num = y.Count(),
+                    x.year,
+                    x.month,
+                    date = x.year + "-" + (x.month >= 10 ? x.month.ToString() : "0" + x.month)
+                }).OrderBy(x=>x.year).ThenBy(x=>x.month);
+                return Ok(dateNum);
             }
             catch(Exception ex)
             {

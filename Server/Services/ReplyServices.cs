@@ -123,5 +123,6 @@ namespace SchoolBBS.Server.Services
         {
             return Context.PostReply.Count();
         }
+        
     }
 }

@@ -76,6 +76,19 @@ builder.Services.AddDbContext<bbsdbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+//跨域CORS 临时供其他项目
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("any", builder =>
+    {
+        builder.WithMethods("GET", "POST", "HEAD", "PUT", "DELETE", "OPTIONS")
+        .AllowAnyHeader()
+        //.AllowAnyMethod()
+        .AllowAnyOrigin();
+    });
+});
+//结束
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -96,6 +109,8 @@ app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
 app.UseRouting();
+//CORS
+app.UseCors("any");
 
 app.MapRazorPages();
 app.UseAuthentication();

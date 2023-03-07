@@ -19,6 +19,10 @@
         {
             <div>
                 <a href="usercenter" style="color:white;font-weight:bold;margin:10px 10px;">欢迎，@UserName !</a>
+                @if (IsAdmin == true)
+                {
+                    <a href="management" style="color:white;font-weight:bold;margin:10px 10px;">进入管理界面</a>
+                }
                 <a href="logout" style="color:white;font-weight:bold;margin:10px 10px;" >登出</a>
             </div>
         }
@@ -38,7 +42,7 @@
     </Main>
     <Footer>
         <div class="text-center flex-fill">
-            <a class="page-layout-demo-footer-link" href="management" target="_blank" style="color:white;text-decoration:none">人工智能学院 软工1903 刘玉潭</a>
+            <a class="page-layout-demo-footer-link" href="https://github.com/MissingLilith/BBS" target="_blank" style="color:white;text-decoration:none">人工智能学院 软工1903 刘玉潭</a>
         </div>
     </Footer>
     <NotFound>
