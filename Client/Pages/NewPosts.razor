@@ -40,7 +40,7 @@
 <h1 style="text-align:center;margin:20px">欢迎访问新鲜出炉板块</h1>
 
 <div>
-    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" OnClickRowCallback="@ClickRow"
+    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" OnClickRowCallback="@ClickRow" AllowResizing="true"
            ShowToolbar="true" ShowSearch="false" ShowCardView="true" ShowAdvancedSearch="false" ShowDefaultButtons="false"
            IsBordered="true" ShowEmpty="true" IsAutoRefresh="true" ShowSkeleton="true">
         <TableToolbarTemplate>

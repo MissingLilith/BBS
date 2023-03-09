@@ -42,9 +42,17 @@ namespace SchoolBBS.Client.Shared
             if (!string.IsNullOrEmpty(token))
             {
                 httpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                var info = await httpClient.GetFromJsonAsync<GetUserModel>("api/Account/GetSelfInfo");
-                IsAdmin = info.IsAdmin;
-                UserName= info.UserName;
+                try
+                {
+                    var info = await httpClient.GetFromJsonAsync<GetUserModel>("api/Account/GetSelfInfo");
+                    UserName = info.UserName;
+                    IsAdmin = info.IsAdmin;
+                }
+                catch (Exception ex)
+                {
+                    localStorageService.RemoveItem("token");
+                    throw new Exception("用户数据获取失败，请重新登陆");
+                }
             }
         }
 
@@ -63,5 +71,10 @@ namespace SchoolBBS.Client.Shared
         }
         [Inject] Blazored.LocalStorage.ISyncLocalStorageService localStorageService { get; set; }
         [Inject] HttpClient httpClient { get; set; }
+        [Inject] NavigationManager Navigation { get; set; }
+        private void ButtonClick(string s)
+        {
+            Navigation.NavigateTo(s);
+        }
     }
 }

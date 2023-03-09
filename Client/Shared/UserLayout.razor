@@ -11,8 +11,12 @@
             <div class="flex-fill d-sm-none">
             </div>
             <div>
-                <a href="usercenter" style="color:white;font-weight:bold;margin:10px 10px;">你好，@UserName !</a>
-                <a href="logout" style="color:white;font-weight:bold;margin:10px 10px;">登出</a>
+                <Button OnClick="@(()=>ButtonClick("usercenter"))" Color="Color.Primary" style="margin-right:10px">欢迎，@UserName !</Button>
+                @if (IsAdmin == true)
+                {
+                    <Button OnClick="@(()=>ButtonClick("management"))" Color="Color.Warning" style="margin-right:10px">进入管理界面</Button>
+                }
+                <Button OnClick="@(()=>ButtonClick("logout"))" Color="Color.Secondary" style="fmargin-right:10px">登出</Button>
             </div>
         </Header>
         <Side>
@@ -40,39 +44,39 @@
 }
 @if (IsLogin == false)
 {
-            <Layout SideWidth="0" IsPage="true" ShowGotoTop="true" ShowCollapseBar="true"
+    <Layout SideWidth="0" IsPage="true" ShowGotoTop="true" ShowCollapseBar="true"
         IsFullSide="@IsFullSide" IsFixedHeader="@IsFixedHeader" IsFixedFooter="@IsFixedFooter" ShowFooter="@ShowFooter"
         TabDefaultUrl="/"
         AdditionalAssemblies="new[] { GetType().Assembly }" class="@Theme">
-            <Header>
-                <span class="ms-3 flex-sm-fill d-none d-sm-block">校园BBS论坛个人中心</span>
-                <div class="flex-fill d-sm-none">
+        <Header>
+            <span class="ms-3 flex-sm-fill d-none d-sm-block">校园BBS论坛个人中心</span>
+            <div class="flex-fill d-sm-none">
+            </div>
+            <div>
+                <Button OnClick="@(()=>ButtonClick("login"))" Color="Color.Primary" style="margin-right:10px">登录</Button>
+                <Button OnClick="@(()=>ButtonClick("register"))" Color="Color.Secondary">注册</Button>
+            </div>
+        </Header>
+        <Side>
+            <div class="layout-banner">
+                <img class="layout-logo" src="/icon-192.png" />
+                <div class="layout-title">
+                    <span>校园BBS</span>
                 </div>
-                <div>
-                    <a href="login" style="color:white;font-weight:bold;margin:10px 10px;">登录</a>
-                    <a href="register" style="color:white;font-weight:bold;margin:10px 10px;">注册</a>
-                </div>
-            </Header>
-            <Side>
-                <div class="layout-banner">
-                    <img class="layout-logo" src="/icon-192.png" />
-                    <div class="layout-title">
-                        <span>校园BBS</span>
-                    </div>
-                </div>
-            </Side>
-            <Main>
-                <CascadingValue Value="this" IsFixed="true">
-                    <h1 style="width:100%;text-align:center">请登录</h1>
-                </CascadingValue>
-            </Main>
-            <Footer>
-                <div class="text-center flex-fill">
+            </div>
+        </Side>
+        <Main>
+            <CascadingValue Value="this" IsFixed="true">
+                <h1 style="width:100%;text-align:center">请登录</h1>
+            </CascadingValue>
+        </Main>
+        <Footer>
+            <div class="text-center flex-fill">
                 <a class="page-layout-demo-footer-link" href="https://github.com/MissingLilith/BBS" target="_blank" style="color:white">人工智能学院 软工1903 刘玉潭</a>
-                </div>
-            </Footer>
-            <NotFound>
-                <p>Sorry, there's nothing at this address.</p>
-            </NotFound>
-        </Layout>
+            </div>
+        </Footer>
+        <NotFound>
+            <p>Sorry, there's nothing at this address.</p>
+        </NotFound>
+    </Layout>
 }

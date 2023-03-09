@@ -10,20 +10,32 @@
         </div>
         @if (IsLogin == false)
         {
+            @*<div>
+        <a href="login" style="color:white;font-weight:bold;margin:10px 10px;">登录</a>
+        <a href="register" style="color:white;font-weight:bold;margin:10px 10px;">注册</a>
+        </div>*@
             <div>
-                <a href="login" style="color:white;font-weight:bold;margin:10px 10px;">登录</a>
-                <a href="register" style="color:white;font-weight:bold;margin:10px 10px;">注册</a>
+                <Button OnClick="@(()=>ButtonClick("login"))" Color="Color.Primary" style="margin-right:10px">登录</Button>
+                <Button OnClick="@(()=>ButtonClick("register"))" Color="Color.Secondary">注册</Button>
             </div>
         }
         @if (IsLogin == true)
         {
+            @*<div>
+        <a href="usercenter" style="color:white;font-weight:bold;margin:10px 10px;">欢迎，@UserName !</a>
+        @if (IsAdmin == true)
+        {
+        <a href="management" style="color:white;font-weight:bold;margin:10px 10px;">进入管理界面</a>
+        }
+        <a href="logout" style="color:white;font-weight:bold;margin:10px 10px;" >登出</a>
+        </div>*@
             <div>
-                <a href="usercenter" style="color:white;font-weight:bold;margin:10px 10px;">欢迎，@UserName !</a>
+                <Button OnClick="@(()=>ButtonClick("usercenter"))" Color="Color.Primary" style="margin-right:10px">欢迎，@UserName !</Button>
                 @if (IsAdmin == true)
                 {
-                    <a href="management" style="color:white;font-weight:bold;margin:10px 10px;">进入管理界面</a>
+                    <Button OnClick="@(()=>ButtonClick("management"))" Color="Color.Warning" style="margin-right:10px">进入管理界面</Button>
                 }
-                <a href="logout" style="color:white;font-weight:bold;margin:10px 10px;" >登出</a>
+                <Button OnClick="@(()=>ButtonClick("logout"))" Color="Color.Secondary" style="fmargin-right:10px">登出</Button>
             </div>
         }
     </Header>
