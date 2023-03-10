@@ -60,6 +60,32 @@ namespace SchoolBBS.Server.Controllers
         /// </summary>
         /// <param name="postModel"></param>
         /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetPostByTime()
+        {
+            try
+            {
+                List<Posts> posts = postServices.GetPostByTime();
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet]
+        public IActionResult GetPostByLikes()
+        {
+            try
+            {
+                List<Posts> posts = postServices.GetPostByLikes();
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
         [HttpPost]
         [Authorize]
         public IActionResult AddPost(PostCreateModel postModel)
@@ -206,7 +232,7 @@ namespace SchoolBBS.Server.Controllers
         /// <param name="postDetailModel"></param>
         /// <returns></returns>
         [HttpPost]
-        [Authorize(Policy = "admin")]
+        [Authorize]
         public IActionResult EditPostDetail(PostDetailModel postDetailModel)
         {
             try
@@ -258,7 +284,7 @@ namespace SchoolBBS.Server.Controllers
             {
                 return Ok(postServices.GetStatistics());
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

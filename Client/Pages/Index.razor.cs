@@ -17,13 +17,20 @@ namespace SchoolBBS.Client.Pages
     };
 
         private List<PostListModel> Item = new();
+        private List<PostListModel> Item2 = new();
         private static IEnumerable<int> PageItemsSource => new int[] { 7 };
         protected override async Task OnInitializedAsync()
         {
             await base.OnInitializedAsync();
 
-            Item = await httpClient.GetFromJsonAsync<List<PostListModel>>("api/Post/GetAllPosts");
+            Item = await httpClient.GetFromJsonAsync<List<PostListModel>>("api/Post/GetPostByTime");
+            Item2 = await httpClient.GetFromJsonAsync<List<PostListModel>>("api/Post/GetPostByLikes");
         }
+        /// <summary>
+        /// 数据加载
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns></returns>
         private Task<QueryData<PostListModel>> OnQueryAsync(QueryPageOptions options)
         {
             IEnumerable<PostListModel> items = Item;
@@ -35,6 +42,22 @@ namespace SchoolBBS.Client.Pages
                 TotalCount = total,
             });
         }
+        private Task<QueryData<PostListModel>> OnQueryAsync2(QueryPageOptions options)
+        {
+            IEnumerable<PostListModel> items = Item2;
+            var total = items.Count();
+            items = items.Skip((options.PageIndex - 1) * options.PageItems).Take(options.PageItems).ToList();
+            return Task.FromResult(new QueryData<PostListModel>()
+            {
+                Items = items,
+                TotalCount = total,
+            });
+        }
+        /// <summary>
+        /// 按钮点击时间
+        /// </summary>
+        /// <param name="item"></param>
+        /// <returns></returns>
         private Task ClickRow(PostListModel item)
         {
             Navigation.NavigateTo($"/postdetail?postId={item.Id}");

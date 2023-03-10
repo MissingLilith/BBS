@@ -45,6 +45,30 @@ namespace SchoolBBS.Server.Services
                 throw new Exception("数据获取失败或无数据");
             }
         }
+        public List<Posts> GetPostByTime()
+        {
+            List<Posts> posts = Context.Posts.OrderByDescending(x => x.CreateTime).Take(20).ToList();
+            if (posts.Count > 0)
+            {
+                return posts;
+            }
+            else
+            {
+                throw new Exception("数据获取失败或无数据");
+            }
+        }
+        public List<Posts> GetPostByLikes()
+        {
+            List<Posts> posts = Context.Posts.OrderByDescending(x => x.Likes).Take(20).ToList();
+            if (posts.Count > 0)
+            {
+                return posts;
+            }
+            else
+            {
+                throw new Exception("数据获取失败或无数据");
+            }
+        }
         /// <summary>
         /// 发帖
         /// </summary>
@@ -259,13 +283,13 @@ namespace SchoolBBS.Server.Services
         {
             List<StatisticsModel> sList = new List<StatisticsModel>();
             int n = Context.PostTypes.Count();
-            for(int i = 1; i <= n; i++)
+            for (int i = 1; i <= n; i++)
             {
                 sList.Add(new StatisticsModel
                 {
                     Id = i,
                     Name = Context.PostTypes.FirstOrDefault(x => x.Id == i).PostTypeName,
-                    Quantity=Context.Posts.Count(x=>x.PostTypeId==i)
+                    Quantity = Context.Posts.Count(x => x.PostTypeId == i)
                 });
             }
             return sList;

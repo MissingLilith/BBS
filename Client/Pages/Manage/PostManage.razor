@@ -9,7 +9,7 @@
 <Divider/>
 
 <Table TItem="PostManageModel" OnQueryAsync="@OnQueryAsync" OnAddAsync="@OnAddAsync" OnSaveAsync="@OnSaveAsync" OnDeleteAsync="@OnDeleteAsync"
-       ShowEmpty="true" IsPagination="true" IsStriped="true" IsBordered="true" IsMultipleSelect="true" IsAutoRefresh="true"
+       ShowEmpty="true" IsPagination="true" IsStriped="true" IsBordered="true" IsMultipleSelect="true" IsAutoRefresh="true" AllowResizing="true"
        ShowToolbar="true" ShowSearch="true" ShowExtendButtons="true" ShowAddButton="false" ShowSkeleton="true" ShowAdvancedSearch="false" OnClickRowCallback="@ClickRow">
     <TableColumns>
         <TableColumn @bind-Field="@context.Id" Width="100" Readonly="true" Editable="false" Sortable="true" Filterable="true" Searchable="true" />

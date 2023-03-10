@@ -16,7 +16,7 @@ namespace SchoolBBS.Client.Pages
         {
             await base.OnInitializedAsync();
 
-            Posts = await httpClient.GetFromJsonAsync<List<PostListModel>>("api/Post/GetAllPosts");
+            Posts = await httpClient.GetFromJsonAsync<List<PostListModel>>("api/Post/GetPostByLikes");
         }
         private Task<QueryData<PostListModel>> OnQueryAsync(QueryPageOptions options)
         {

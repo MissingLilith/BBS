@@ -162,6 +162,11 @@ namespace SchoolBBS.Server.Services
                 throw new Exception("用户不存在");
             }
         }
+        /// <summary>
+        /// 管理员修改用户
+        /// </summary>
+        /// <param name="userManageModel"></param>
+        /// <returns></returns>
         public int EditUserByAdmin(UserManageModel userManageModel)
         {
 
@@ -186,6 +191,12 @@ namespace SchoolBBS.Server.Services
                 return user.UserId;
             }
         }
+        /// <summary>
+        /// 用户注销删除
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public bool DeleteUser(int userId)
         {
             bool IsUserHave = Context.Users.ToList().Exists(x => x.UserId == userId);
