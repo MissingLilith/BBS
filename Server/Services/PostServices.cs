@@ -275,6 +275,10 @@ namespace SchoolBBS.Server.Services
                 throw new Exception("帖子不存在");
             }
         }
+        /// <summary>
+        /// 发帖数据统计
+        /// </summary>
+        /// <returns></returns>
         public int GetPostCount()
         {
             return Context.Posts.Count();
