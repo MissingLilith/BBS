@@ -22,7 +22,7 @@
     </Table>
 </div>
 <div style="width:49%;float:right">
-    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync" IsStriped="true" IsBordered="true" ShowSkeleton="true" ShowEmpty="true"
+    <Table TItem="PostListModel" OnQueryAsync="@OnQueryAsync2" IsStriped="true" IsBordered="true" ShowSkeleton="true" ShowEmpty="true"
            OnClickRowCallback="@ClickRow" IsAutoRefresh="true" PageItemsSource="@PageItemsSource">
         <TableColumns>
             <TableColumn @bind-Field="@context.Likes" Visible="false" Sortable="true" DefaultSort="true" DefaultSortOrder="@SortOrder.Desc"/>

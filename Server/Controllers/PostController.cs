@@ -56,6 +56,40 @@ namespace SchoolBBS.Server.Controllers
             }
         }
         /// <summary>
+        /// 按时间排序
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetPostByTime()
+        {
+            try
+            {
+                List<Posts> posts=postServices.GetPostByTime();
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
+        /// 按热门排序
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        public IActionResult GetPostByLikes()
+        {
+            try
+            {
+                List<Posts> posts=postServices.GetPostByLikes();
+                return Ok(posts);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        /// <summary>
         /// 发帖
         /// </summary>
         /// <param name="postModel"></param>
