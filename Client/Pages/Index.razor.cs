@@ -33,18 +33,7 @@ namespace SchoolBBS.Client.Pages
         /// <returns></returns>
         private Task<QueryData<PostListModel>> OnQueryAsync(QueryPageOptions options)
         {
-            IEnumerable<PostListModel> items = PostsByTime;
-            var total = items.Count();
-            items = items.Skip((options.PageIndex - 1) * options.PageItems).Take(options.PageItems).ToList();
-            return Task.FromResult(new QueryData<PostListModel>()
-            {
-                Items = items,
-                TotalCount = total,
-            });
-        }
-        private Task<QueryData<PostListModel>> OnQueryAsync2(QueryPageOptions options)
-        {
-            IEnumerable<PostListModel> items = PostsByLikes;
+            IEnumerable<PostListModel> items = Item;
             var total = items.Count();
             items = items.Skip((options.PageIndex - 1) * options.PageItems).Take(options.PageItems).ToList();
             return Task.FromResult(new QueryData<PostListModel>()

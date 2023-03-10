@@ -14,7 +14,7 @@ namespace SchoolBBS.Shared
         public int Id { get; set; }
         public int PostTypeId { get; set; }
         public string PostTitle { get; set; }
-        public PostContent PostContent { get; set; }
+        public string PostContent { get; set; }
         public int Replys { get; set; }
         public DateTime CreateTime { get; set; }
         public int CreateUserId { get; set; }

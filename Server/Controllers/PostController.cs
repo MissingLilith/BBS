@@ -94,32 +94,6 @@ namespace SchoolBBS.Server.Controllers
         /// </summary>
         /// <param name="postModel"></param>
         /// <returns></returns>
-        [HttpGet]
-        public IActionResult GetPostByTime()
-        {
-            try
-            {
-                List<Posts> posts = postServices.GetPostByTime();
-                return Ok(posts);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        [HttpGet]
-        public IActionResult GetPostByLikes()
-        {
-            try
-            {
-                List<Posts> posts = postServices.GetPostByLikes();
-                return Ok(posts);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
         [HttpPost]
         [Authorize]
         public IActionResult AddPost(PostCreateModel postModel)
